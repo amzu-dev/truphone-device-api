@@ -75,7 +75,7 @@ The body must have mandator id for updating a device
     HEADER - Content-Type: application/json
     BODY -
     {
-    	"id": 1,
+        "id": 1,
         "name":"iPhone 12",
         "brand":"Apple"
     }
@@ -90,6 +90,9 @@ The following script can be used for running the API locally using docker (note 
 
 `./run-docker.sh`
 
-you can use `mavenw.bat` file to run the same commands as provided in the .sh file for running compiling and running the application
+you can use `mavenw.cmd` file to run the same commands as provided in the .sh file for running compiling and running the application
+
+If you are using postman, you can download the Truphone.postman_collection.json file and import it.
+
 # Conclusion
 Feel free to get in touch with me if you require any further information.
