@@ -1,9 +1,9 @@
 package com.truphone.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.truphone.device.DeviceManagerApplication;
-import com.truphone.device.entity.Device;
-import com.truphone.device.jpa.DeviceRepository;
+import com.phone.device.DeviceManagerApplication;
+import com.phone.device.entity.Device;
+import com.phone.device.jpa.DeviceRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -138,7 +138,7 @@ public class DeviceControllerTest {
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message",is("Device Not found or Invalid Device Id")));
+                .andExpect(jsonPath("$.message",is("Device Not found or Invalid Device Id.")));
 
         verify(deviceRepository,times(0)).saveAndFlush(any(Device.class));
 
@@ -199,7 +199,7 @@ public class DeviceControllerTest {
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message",is("At least one of name or device value are needed.")));
+                .andExpect(jsonPath("$.message",is("Device Not found or Invalid Device Id.")));
 
         verify(deviceRepository,times(0)).getById(anyLong());
         verify(deviceRepository,times(0)).saveAndFlush(any(Device.class));

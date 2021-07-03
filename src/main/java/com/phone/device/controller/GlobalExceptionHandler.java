@@ -1,4 +1,4 @@
-package com.truphone.device.controller;
+package com.phone.device.controller;
 
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
@@ -23,11 +23,11 @@ public class GlobalExceptionHandler  extends ResponseEntityExceptionHandler {
 
     /**
      * This method will help return Validation errors in a readable format.
-     * @param ex
-     * @param headers
-     * @param status
-     * @param request
-     * @return
+     * @param ex Exception to handle
+     * @param headers Http Headers
+     * @param status Http Status
+     * @param request Request
+     * @return Returns an Object
      */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -44,6 +44,5 @@ public class GlobalExceptionHandler  extends ResponseEntityExceptionHandler {
         body.put("errors", errors);
 
         return new ResponseEntity<>(body, headers, status);
-
     }
 }

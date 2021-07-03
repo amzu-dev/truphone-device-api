@@ -1,2 +1,2 @@
 ./mvnw package
-docker build -t truphone .
+docker build -t phonemanager .

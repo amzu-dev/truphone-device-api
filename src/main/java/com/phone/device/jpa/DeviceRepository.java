@@ -1,7 +1,6 @@
-package com.truphone.device.jpa;
+package com.phone.device.jpa;
 
-import com.truphone.device.entity.Device;
-import org.springframework.data.domain.Pageable;
+import com.phone.device.entity.Device;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -15,4 +14,5 @@ import java.util.List;
  */
 public interface DeviceRepository extends JpaRepository<Device, Long> {
     List<Device> findByBrandContainingIgnoreCase(String name);
+
 }

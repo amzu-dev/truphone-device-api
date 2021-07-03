@@ -1,25 +1,24 @@
-package com.truphone.device.controller;
+package com.phone.device.controller;
 
-import com.truphone.device.entity.Device;
-import com.truphone.device.entity.OnCreate;
-import com.truphone.device.entity.OnUpdate;
-import com.truphone.device.jpa.DeviceRepository;
+import com.phone.device.entity.Device;
+import com.phone.device.entity.OnCreate;
+import com.phone.device.entity.OnUpdate;
+import com.phone.device.jpa.DeviceRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.beans.PropertyDescriptor;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,6 +34,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/device")
 public class DeviceController {
+
     private final DeviceRepository deviceRepository;
 
     @Autowired
@@ -78,6 +78,11 @@ public class DeviceController {
         return ResponseEntity.ok(deviceRepository.findAll());
     }
 
+    @GetMapping(value = "/paged-list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<Device>> pagedList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size) {
+        return ResponseEntity.ok(deviceRepository.findAll(PageRequest.of(page, size)));
+    }
+
     /**
      * Search by Brand Name.
      * @param searchTerm Search Term
@@ -95,13 +100,13 @@ public class DeviceController {
      */
     @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateDevice(@Validated(OnUpdate.class) @RequestBody Device device) {
+        if(device.getId() == null ) {
+            return ResponseEntity.badRequest().body("{\n\"message\":\"Device Not found or Invalid Device Id.\"\n}");
+        }
         if(device.getName() == null && device.getBrand() == null) {
             return ResponseEntity.badRequest().body("{\n\"message\":\"At least one of name or device value are needed.\"\n}");
         }
         Device oldDevice = deviceRepository.getById(device.getId());
-        if(oldDevice == null) {
-            return ResponseEntity.badRequest().body("{\n\"message\":\"Device Not found or Invalid Device Id\"\n}");
-        }
         BeanUtils.copyProperties(device, oldDevice,getNullPropertyNames(device));
         System.out.println(oldDevice);
         deviceRepository.saveAndFlush(oldDevice);
@@ -117,7 +122,7 @@ public class DeviceController {
         final BeanWrapper src = new BeanWrapperImpl(source);
         PropertyDescriptor[] pds = src.getPropertyDescriptors();
 
-        Set<String> emptyNames = new HashSet<String>();
+        Set<String> emptyNames = new HashSet<>();
         for (PropertyDescriptor pd : pds) {
             Object srcValue = src.getPropertyValue(pd.getName());
             if (srcValue == null)
